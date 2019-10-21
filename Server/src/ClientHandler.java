@@ -4,7 +4,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
-import java.util.Scanner;
 
 public class ClientHandler implements Runnable {
 
@@ -21,7 +20,6 @@ public class ClientHandler implements Runnable {
 
         try {
 
-
             while (true) {
                 var message = serverInput.readLine();
 
@@ -33,9 +31,11 @@ public class ClientHandler implements Runnable {
 
                 System.out.println(clientSocket.getInetAddress().toString() + ": " + message);
 
-                for (var otherClient : otherClients) {
-                    otherClient.serverOutput.println(clientSocket.getInetAddress().toString() + ":" + clientSocket.getPort() + ": " + message);
-                }
+                otherClients.forEach(
+                        otherClient -> otherClient
+                                .serverOutput.println(
+                                        clientSocket.getInetAddress().toString()
+                                                + ":" + clientSocket.getPort() + ": " + message));
 
             }
         } catch (IOException e) {
